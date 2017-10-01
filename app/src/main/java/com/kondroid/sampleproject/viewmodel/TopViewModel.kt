@@ -6,4 +6,8 @@ package com.kondroid.sampleproject.viewmodel
 
 class TopViewModel : BaseViewModel() {
 
+
+    fun tapStart() {
+    var a = 1
+    }
 }
