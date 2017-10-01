@@ -29,7 +29,7 @@
             app:srcCompat="@drawable/top_background" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="@+id/imageView" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/startButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -57,7 +57,7 @@
             app:layout_constraintDimensionRatio="6:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
     </android.support.constraint.ConstraintLayout>
 
 </layout>
