@@ -15,7 +15,7 @@ object AccountManager {
 
     private val UDTokenKey = "token"
     private val UDUserIdKey = "user_id"
-    private lateinit var context: Context
+    lateinit var context: Context
 
     var token: TokenDto? = null
         set(value) {
