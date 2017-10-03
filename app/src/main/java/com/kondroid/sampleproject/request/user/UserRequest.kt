@@ -24,7 +24,6 @@ interface UserRequest {
     data class CreateResult(val user: UserDto?,
                             val token: TokenDto?)
 
-    @FormUrlEncoded
     @Headers("Content-Type: application/json")
     @POST("/user/create")
     fun create(@Body params: CreateParams): Observable<CreateResult>

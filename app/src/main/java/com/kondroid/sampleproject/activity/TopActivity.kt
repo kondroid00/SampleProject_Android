@@ -17,7 +17,7 @@ class TopActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         var binding = DataBindingUtil.setContentView<ActivityTopBinding>(this, R.layout.activity_top)
         vm = TopViewModel()
-        binding.viewModel = vm
+        binding.vm = vm
 
         supportActionBar?.hide()
 
@@ -26,11 +26,8 @@ class TopActivity : BaseActivity() {
             vm.login()
         }
 
-        val weakRef = WeakReference<TopActivity>(this)
         vm.onTapStart = {
-            if (weakRef != null) {
-                goToSignUp()
-            }
+            goToSignUp()
         }
     }
 

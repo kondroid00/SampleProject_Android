@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers
 
 class SignUpViewModel : BaseViewModel() {
     var nameText: ObservableField<String> = ObservableField("")
+    var nameValidationText: ObservableField<String> = ObservableField("")
 
     val userModel = UsersModel()
 
@@ -27,15 +28,15 @@ class SignUpViewModel : BaseViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<UserRequest.CreateResult>() {
                     override fun onComplete() {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                     override fun onNext(t: UserRequest.CreateResult) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                     override fun onError(e: Throwable) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                 })

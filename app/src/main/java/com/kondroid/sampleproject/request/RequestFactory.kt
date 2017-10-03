@@ -2,11 +2,10 @@ package com.kondroid.sampleproject.request
 
 import android.util.Log
 import com.kondroid.sampleproject.constants.NetworkConstants
-import com.kondroid.sampleproject.request.user.UserRequest
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
@@ -23,10 +22,10 @@ object RequestFactory {
 
         val client = OkHttpClient.Builder().addInterceptor(logging).build()
         retrofit = Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(NetworkConstants.apiUrl)
-                .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 

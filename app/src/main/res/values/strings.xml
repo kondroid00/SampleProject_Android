@@ -2,5 +2,5 @@
     <string name="app_name">SampleProject</string>
     <string name="title_name">SampleProject</string>
     <string name="const_api_server_scheme">http://</string>
-    <string name="const_api_server_host">logalhost:8080</string>
+    <string name="const_api_server_host">192.168.100.6:8080</string>
 </resources>

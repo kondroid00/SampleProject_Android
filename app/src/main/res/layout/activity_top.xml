@@ -7,7 +7,7 @@
 
     <data>
         <variable
-            name="viewModel"
+            name="vm"
             type="com.kondroid.sampleproject.viewmodel.TopViewModel" />
     </data>
 
@@ -49,8 +49,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="150dp"
             android:background="@drawable/rounded_corner_green"
-            android:onClick="@{(view)->viewModel.tapStart()}"
-            android:visibility="@{safeUnbox(viewModel.startButtonVisibility)}"
+            android:onClick="@{(view)->vm.tapStart()}"
+            android:visibility="@{safeUnbox(vm.startButtonVisibility)}"
             android:text="Start"
             android:textAllCaps="false"
             android:textColor="@color/White"
@@ -69,7 +69,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:visibility="@{safeUnbox(viewModel.progressBarVisibility)}"
+            android:visibility="@{safeUnbox(vm.progressBarVisibility)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="@+id/imageView"
