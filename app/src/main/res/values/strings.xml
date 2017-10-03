@@ -3,4 +3,10 @@
     <string name="title_name">SampleProject</string>
     <string name="const_api_server_scheme">http://</string>
     <string name="const_api_server_host">192.168.100.6:8080</string>
+    <string name="alert_default_message">通信に失敗しました。</string>
+    <string name="alert_default_title">エラー</string>
+    <string name="alert_default_ok_btn_title">OK</string>
+    <string name="alert_default_cancel_btn_title">キャンセル</string>
+    <string name="error_signup_message">サインアップに失敗しました。</string>
+    <string name="error_signup_title">失敗</string>
 </resources>

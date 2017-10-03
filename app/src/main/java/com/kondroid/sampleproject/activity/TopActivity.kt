@@ -8,7 +8,7 @@ import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.databinding.ActivityTopBinding
 import com.kondroid.sampleproject.viewmodel.TopViewModel
-import java.lang.ref.WeakReference
+import org.jetbrains.anko.startActivity
 
 class TopActivity : BaseActivity() {
     private lateinit var vm: TopViewModel
@@ -32,7 +32,7 @@ class TopActivity : BaseActivity() {
     }
 
     fun goToSignUp() {
-        startActivity<SignUpActivity>(this)
+        startActivity<SignUpActivity>()
     }
 
 }

@@ -9,4 +9,15 @@ import android.view.View
 
 open class BaseViewModel {
     val progressBarVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
+    var requesting: Boolean
+        get() {
+            return progressBarVisibility.get() == View.VISIBLE
+        }
+        set(value) {
+            if (value) {
+                progressBarVisibility.set(View.VISIBLE)
+            } else {
+                progressBarVisibility.set(View.INVISIBLE)
+            }
+        }
 }

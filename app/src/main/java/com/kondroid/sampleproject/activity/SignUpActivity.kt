@@ -7,7 +7,7 @@ import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.databinding.ActivitySignupBinding
 import com.kondroid.sampleproject.viewmodel.SignUpViewModel
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : BaseActivity() {
     private lateinit var vm: SignUpViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +16,21 @@ class SignUpActivity : AppCompatActivity() {
         vm = SignUpViewModel()
         binding.vm = vm
 
+        vm.signUpOnSuccess = {
+            signUpSuccess()
+        }
+        vm.signUpOnFailed = { e ->
+            signUpFailed(e)
+        }
 
+    }
+
+    fun signUpSuccess() {
+        goToHome()
+    }
+
+    fun signUpFailed(e: Throwable) {
+        showAlert(getString(R.string.error_signup_message),
+                  getString(R.string.error_signup_title))
     }
 }
