@@ -2,6 +2,13 @@ package com.kondroid.sampleproject.viewmodel
 
 import android.databinding.ObservableField
 import android.view.View
+import com.kondroid.sampleproject.auth.AccountManager
+import com.kondroid.sampleproject.model.AuthModel
+import com.kondroid.sampleproject.request.AuthRequest
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.internal.operators.single.SingleDoOnSuccess
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by kondo on 2017/09/28.
@@ -10,10 +17,36 @@ import android.view.View
 class TopViewModel : BaseViewModel() {
     val startButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
+    val authModel = AuthModel()
+
     lateinit var onTapStart: () -> Unit
     
 
-    fun login() {
+    fun login(onSuccess: () -> Unit, onFailed: (e: Throwable) -> Unit) {
+        if (requesting) return
+        requesting = true
+
+        val params = AuthRequest.LoginParams(AccountManager.getUserId())
+        val observable = authModel.login(params)
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : DisposableObserver<AuthRequest.LoginResult>() {
+                    override fun onComplete() {
+                        requesting = false
+                    }
+
+                    override fun onNext(t: AuthRequest.LoginResult) {
+                        requesting = false
+                        AccountManager.token = t.token
+                        onSuccess()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        requesting = false
+                        onFailed(e)
+                    }
+
+                })
 
     }
 

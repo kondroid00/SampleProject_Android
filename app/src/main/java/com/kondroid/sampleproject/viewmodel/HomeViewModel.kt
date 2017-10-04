@@ -1,5 +1,6 @@
 package com.kondroid.sampleproject.viewmodel
 
+import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.dto.RoomDto
 import com.kondroid.sampleproject.model.RoomsModel
 import com.kondroid.sampleproject.request.RoomRequest
@@ -20,7 +21,7 @@ class HomeViewModel : BaseViewModel() {
     lateinit var fetchRoomOnSuccess: () -> Unit
     lateinit var fetchRoomOnFailed: (Throwable) -> Unit
 
-    fun fetchRooms() {
+    fun fetchRooms(onSuccess: () -> Unit, onFailed: (e: Throwable) -> Unit) {
         if (requesting) return
         requesting = true
 
@@ -35,12 +36,13 @@ class HomeViewModel : BaseViewModel() {
 
                     override fun onNext(t: RoomRequest.FetchResult) {
                         requesting = false
-                        fetchRoomOnSuccess()
+                        rooms = t.rooms?.let {it} ?: listOf()
+                        onSuccess()
                     }
 
                     override fun onError(e: Throwable) {
                         requesting = false
-                        fetchRoomOnFailed(e)
+                        onFailed(e)
                     }
 
                 })

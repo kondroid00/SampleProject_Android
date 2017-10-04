@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.kondroid.sampleproject.R
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -33,7 +34,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun goToHome() {
-
+        startActivity<HomeActivity>()
     }
 }
 

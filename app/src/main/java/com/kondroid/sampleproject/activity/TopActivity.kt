@@ -23,16 +23,30 @@ class TopActivity : BaseActivity() {
 
         if(AccountManager.hasUserId()) {
             vm.startButtonVisibility.set(View.VISIBLE)
-            vm.login()
+            login()
         }
 
         vm.onTapStart = {
-            goToSignUp()
+            signUp()
         }
     }
 
-    fun goToSignUp() {
+    private fun signUp() {
         startActivity<SignUpActivity>()
+    }
+
+    private fun login() {
+        vm.login({
+                    goToHome()
+                 },
+                 {e ->
+                     showAlert(getString(R.string.error_login_message),
+                               getString(R.string.error_login_title),
+                               getString(R.string.error_login_btn_retry),
+                               {
+                                   login()
+                               })
+                 })
     }
 
 }

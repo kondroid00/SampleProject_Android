@@ -22,6 +22,8 @@ object AccountManager {
             if(value != null) {
                 if (value.expiredAt!! <= Date().currentTimeNanoMillis()) {
                     field = null
+                } else {
+                    field = value
                 }
             }
         }

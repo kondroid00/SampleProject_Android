@@ -21,14 +21,7 @@ class HomeActivity : BaseActivity() {
 
         setUpRecyclerView()
 
-        vm.fetchRoomOnSuccess = {
-            fetchRoomOnSuccess()
-        }
-        vm.fetchRoomOnFailed = {e ->
-            fetchRoomOnFailed(e)
-        }
-
-        vm.fetchRooms()
+        fetchRooms()
     }
 
     private fun setUpRecyclerView() {
@@ -39,13 +32,13 @@ class HomeActivity : BaseActivity() {
         recyclerView.adapter = roomListAdapter
     }
 
-    private fun
+    private fun fetchRooms() {
+        vm.fetchRooms({
+                          roomListAdapter.setRooms(vm.rooms)
+                      },
+                      {e ->
 
-    fun fetchRoomOnSuccess() {
-        roomListAdapter.setRooms(vm.rooms)
+                      })
     }
 
-    fun fetchRoomOnFailed(e: Throwable) {
-
-    }
 }

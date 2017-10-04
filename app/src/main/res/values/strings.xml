@@ -9,4 +9,7 @@
     <string name="alert_default_cancel_btn_title">キャンセル</string>
     <string name="error_signup_message">サインアップに失敗しました。</string>
     <string name="error_signup_title">失敗</string>
+    <string name="error_login_message">ログインに失敗しました。</string>
+    <string name="error_login_title">ログイン失敗</string>
+    <string name="error_login_btn_retry">リトライ</string>
 </resources>

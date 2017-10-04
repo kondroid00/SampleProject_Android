@@ -41,6 +41,7 @@ class SignUpViewModel : BaseViewModel() {
                     override fun onNext(t: UserRequest.CreateResult) {
                         requesting = false
                         AccountManager.token = t.token
+                        AccountManager.user = t.user
                         signUpOnSuccess()
                     }
 

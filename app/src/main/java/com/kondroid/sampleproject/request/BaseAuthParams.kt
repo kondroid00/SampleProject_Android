@@ -8,9 +8,5 @@ import com.kondroid.sampleproject.auth.AccountManager
  */
 
 open class BaseAuthParams {
-    var token: String?
-
-    init {
-        token = AccountManager.token?.token
-    }
+    var token: String? = AccountManager.token?.token
 }
