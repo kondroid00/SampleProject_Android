@@ -1,7 +1,7 @@
 package com.kondroid.sampleproject.model
 
 import com.kondroid.sampleproject.request.RequestFactory
-import com.kondroid.sampleproject.request.user.UserRequest
+import com.kondroid.sampleproject.request.UserRequest
 import io.reactivex.Observable
 
 /**

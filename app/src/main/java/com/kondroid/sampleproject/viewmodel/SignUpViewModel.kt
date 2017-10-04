@@ -3,7 +3,7 @@ package com.kondroid.sampleproject.viewmodel
 import android.databinding.ObservableField
 import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.model.UsersModel
-import com.kondroid.sampleproject.request.user.UserRequest
+import com.kondroid.sampleproject.request.UserRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
