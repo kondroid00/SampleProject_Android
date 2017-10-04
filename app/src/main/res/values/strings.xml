@@ -12,4 +12,8 @@
     <string name="error_login_message">ログインに失敗しました。</string>
     <string name="error_login_title">ログイン失敗</string>
     <string name="error_login_btn_retry">リトライ</string>
+    <string name="title_signup">新規登録</string>
+    <string name="title_home">ホーム</string>
+    <string name="title_room_create">新規作成</string>
+    <string name="menu_room_add">ルームを追加</string>
 </resources>

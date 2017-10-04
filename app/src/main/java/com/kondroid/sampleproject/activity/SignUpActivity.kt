@@ -16,20 +16,25 @@ class SignUpActivity : BaseActivity() {
         vm = SignUpViewModel()
         binding.vm = vm
 
+        setTitle(R.string.title_signup)
+
+        setUpSignUp()
+    }
+
+    private fun setUpSignUp() {
         vm.signUpOnSuccess = {
             signUpSuccess()
         }
         vm.signUpOnFailed = { e ->
             signUpFailed(e)
         }
-
     }
 
-    fun signUpSuccess() {
+    private fun signUpSuccess() {
         goToHome()
     }
 
-    fun signUpFailed(e: Throwable) {
+    private fun signUpFailed(e: Throwable) {
         showAlert(getString(R.string.error_signup_message),
                   getString(R.string.error_signup_title))
     }
