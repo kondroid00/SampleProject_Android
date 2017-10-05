@@ -7,13 +7,17 @@
     <string name="alert_default_title">エラー</string>
     <string name="alert_default_ok_btn_title">OK</string>
     <string name="alert_default_cancel_btn_title">キャンセル</string>
-    <string name="error_signup_message">サインアップに失敗しました。</string>
-    <string name="error_signup_title">失敗</string>
-    <string name="error_login_message">ログインに失敗しました。</string>
-    <string name="error_login_title">ログイン失敗</string>
-    <string name="error_login_btn_retry">リトライ</string>
+    <string name="alert_signup_error_message">サインアップに失敗しました。</string>
+    <string name="alert_signup_error_title">失敗</string>
+    <string name="alert_login_error_message">ログインに失敗しました。</string>
+    <string name="alert_login_error_title">ログイン失敗</string>
+    <string name="alert_room_create_success_message">ルームの作成に成功しました。</string>
+    <string name="alert_room_create_success_title">ルーム作成</string>
+    <string name="alert_room_create_error_message">ルームの作成に失敗しました。</string>
+    <string name="alert_room_create_error_title">失敗</string>
+    <string name="alert_login_error_btn_retry">リトライ</string>
     <string name="title_signup">新規登録</string>
     <string name="title_home">ホーム</string>
-    <string name="title_room_create">新規作成</string>
+    <string name="title_addroom">新規作成</string>
     <string name="menu_room_add">ルームを追加</string>
 </resources>

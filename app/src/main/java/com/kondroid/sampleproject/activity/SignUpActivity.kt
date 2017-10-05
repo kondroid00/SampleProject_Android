@@ -1,7 +1,6 @@
 package com.kondroid.sampleproject.activity
 
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.databinding.ActivitySignupBinding
@@ -16,26 +15,24 @@ class SignUpActivity : BaseActivity() {
         vm = SignUpViewModel()
         binding.vm = vm
 
+        setUpCallback()
+
         setTitle(R.string.title_signup)
-
-        setUpSignUp()
     }
 
-    private fun setUpSignUp() {
-        vm.signUpOnSuccess = {
-            signUpSuccess()
-        }
-        vm.signUpOnFailed = { e ->
-            signUpFailed(e)
+    private fun setUpCallback() {
+        vm.onTapRegister = {
+            signUp()
         }
     }
 
-    private fun signUpSuccess() {
-        goToHome()
-    }
-
-    private fun signUpFailed(e: Throwable) {
-        showAlert(getString(R.string.error_signup_message),
-                  getString(R.string.error_signup_title))
+    private fun signUp() {
+        vm.signUp({
+                      goToHome()
+                  },
+                  {e ->
+                      showAlert(getString(R.string.alert_signup_error_message),
+                                getString(R.string.alert_signup_error_title))
+                  })
     }
 }

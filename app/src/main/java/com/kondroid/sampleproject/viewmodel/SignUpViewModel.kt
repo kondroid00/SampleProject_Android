@@ -16,16 +16,16 @@ class SignUpViewModel : BaseViewModel() {
     var nameText: ObservableField<String> = ObservableField("")
     var nameValidationText: ObservableField<String> = ObservableField("")
 
-    lateinit var signUpOnSuccess: () -> Unit
-    lateinit var signUpOnFailed: (Throwable) -> Unit
+    lateinit var onTapRegister: () -> Unit
 
     val userModel = UsersModel()
 
     fun tapRegister() {
-        signUp()
+        if (requesting) return
+        onTapRegister()
     }
 
-    fun signUp() {
+    fun signUp(onSuccess: () -> Unit, onFailed: (e: Throwable) -> Unit) {
         if (requesting) return
         requesting = true
 
@@ -42,12 +42,12 @@ class SignUpViewModel : BaseViewModel() {
                         requesting = false
                         AccountManager.token = t.token
                         AccountManager.user = t.user
-                        signUpOnSuccess()
+                        onSuccess()
                     }
 
                     override fun onError(e: Throwable) {
                         requesting = false
-                        signUpOnFailed(e)
+                        onFailed(e)
                     }
                 })
     }

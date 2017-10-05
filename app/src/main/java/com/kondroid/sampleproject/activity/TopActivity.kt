@@ -1,7 +1,6 @@
 package com.kondroid.sampleproject.activity
 
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.kondroid.sampleproject.R
@@ -19,6 +18,8 @@ class TopActivity : BaseActivity() {
         vm = TopViewModel()
         binding.vm = vm
 
+        setUpCallback()
+
         supportActionBar?.hide()
 
         if(AccountManager.hasUserId()) {
@@ -26,6 +27,9 @@ class TopActivity : BaseActivity() {
             login()
         }
 
+    }
+
+    private fun setUpCallback() {
         vm.onTapStart = {
             signUp()
         }
@@ -40,9 +44,9 @@ class TopActivity : BaseActivity() {
                     goToHome()
                  },
                  {e ->
-                     showAlert(getString(R.string.error_login_message),
-                               getString(R.string.error_login_title),
-                               getString(R.string.error_login_btn_retry),
+                     showAlert(getString(R.string.alert_login_error_message),
+                               getString(R.string.alert_login_error_title),
+                               getString(R.string.alert_login_error_btn_retry),
                                {
                                    login()
                                })

@@ -51,6 +51,7 @@ class TopViewModel : BaseViewModel() {
     }
 
     fun tapStart() {
+        if (requesting) return
         onTapStart()
     }
 

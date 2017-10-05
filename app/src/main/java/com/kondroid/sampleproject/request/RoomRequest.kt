@@ -21,7 +21,7 @@ interface RoomRequest {
     class CreateResult(val room: RoomDto?)
 
     @Headers("Content-Type: application/json")
-    @POST("/user/create")
+    @POST("/room/create")
     fun create(@Body params: CreateParams): Observable<CreateResult>
 
 
