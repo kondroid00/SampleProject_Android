@@ -11,9 +11,9 @@ import java.lang.ref.WeakReference
  */
 
 open class BaseViewModel(context: Context) {
-    protected val context: WeakReference<Context> = WeakReference(context)
+    val progressBarVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
+    val context: WeakReference<Context> = WeakReference(context)
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    protected val progressBarVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
     protected var requesting: Boolean
         get() {
             return progressBarVisibility.get() == View.VISIBLE
