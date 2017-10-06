@@ -6,6 +6,7 @@ import android.view.View
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.databinding.ActivityTopBinding
+import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.viewmodel.TopViewModel
 import org.jetbrains.anko.startActivity
 
@@ -36,8 +37,9 @@ class TopActivity : BaseActivity() {
     }
 
     private fun setUpCallback() {
+        val weakSelf = makeWeak(this)
         vm.onTapStart = {
-            signUp()
+            weakSelf.get()?.signUp()
         }
     }
 
@@ -46,16 +48,17 @@ class TopActivity : BaseActivity() {
     }
 
     private fun login() {
+        val weakSelf = makeWeak(this)
         vm.login({
-                    goToHome()
+                     weakSelf.get()?.goToHome()
                  },
                  {e ->
-                     showAlert(getString(R.string.alert_login_error_message),
-                               getString(R.string.alert_login_error_title),
-                               getString(R.string.alert_login_error_btn_retry),
-                               {
-                                   login()
-                               })
+                     weakSelf.get()?.showAlert(getString(R.string.alert_login_error_message),
+                                               getString(R.string.alert_login_error_title),
+                                               getString(R.string.alert_login_error_btn_retry),
+                                               {
+                                                   weakSelf.get()?.login()
+                                               })
                  })
     }
 

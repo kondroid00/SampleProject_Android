@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.databinding.ActivityAddRoomBinding
+import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.viewmodel.AddRoomViewModel
+import java.lang.ref.WeakReference
 
 class AddRoomActivity : BaseActivity() {
     private lateinit var vm: AddRoomViewModel
@@ -28,19 +30,25 @@ class AddRoomActivity : BaseActivity() {
         vm.release()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     private fun setUpCallback() {
+        val weakSelf = makeWeak(this)
         vm.onTapCreate = {
-            createRoom()
+            weakSelf.get()?.createRoom()
         }
     }
 
     private fun createRoom() {
+        val weakSelf = makeWeak(this)
         vm.createRoom({
-                          showAlert(getString(R.string.alert_room_create_success_message),
+                          weakSelf.get()?.showAlert(getString(R.string.alert_room_create_success_message),
                                     getString(R.string.alert_room_create_success_title))
                       },
                       {e ->
-                          showAlert(getString(R.string.alert_room_create_error_message),
+                          weakSelf.get()?.showAlert(getString(R.string.alert_room_create_error_message),
                                     getString(R.string.alert_room_create_error_title))
                       })
     }

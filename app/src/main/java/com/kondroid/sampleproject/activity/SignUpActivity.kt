@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.databinding.ActivitySignupBinding
+import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.viewmodel.SignUpViewModel
 
 class SignUpActivity : BaseActivity() {
@@ -28,18 +29,20 @@ class SignUpActivity : BaseActivity() {
     }
 
     private fun setUpCallback() {
+        val weakSelf = makeWeak(this)
         vm.onTapRegister = {
-            signUp()
+            weakSelf.get()?.signUp()
         }
     }
 
     private fun signUp() {
+        val weakSelf = makeWeak(this)
         vm.signUp({
-                      goToHome()
+                      weakSelf.get()?.goToHome()
                   },
                   {e ->
-                      showAlert(getString(R.string.alert_signup_error_message),
-                                getString(R.string.alert_signup_error_title))
+                      weakSelf.get()?.showAlert(getString(R.string.alert_signup_error_message),
+                                                getString(R.string.alert_signup_error_title))
                   })
     }
 }

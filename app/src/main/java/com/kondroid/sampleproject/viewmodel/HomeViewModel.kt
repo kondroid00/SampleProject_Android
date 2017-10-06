@@ -3,6 +3,7 @@ package com.kondroid.sampleproject.viewmodel
 import android.content.Context
 import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.dto.RoomDto
+import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.model.RoomsModel
 import com.kondroid.sampleproject.request.RoomRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,19 +24,20 @@ class HomeViewModel(context: Context) : BaseViewModel(context) {
         if (requesting) return
         requesting = true
 
+        val weakSelf = makeWeak(this)
         val params = RoomRequest.FetchParams()
         val observable = roomModel.fetchRooms(params)
         val d = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({t ->
-                    requesting = false
-                    rooms = t.rooms?.let {it} ?: listOf()
+                    weakSelf.get()?.requesting = false
+                    weakSelf.get()?.rooms = t.rooms?.let {it} ?: listOf()
                     onSuccess()
                 }, {e ->
-                    requesting = false
+                    weakSelf.get()?.requesting = false
                     onFailed(e)
                 }, {
-                    requesting = false
+                    weakSelf.get()?.requesting = false
                 })
         compositeDisposable.add(d)
     }
