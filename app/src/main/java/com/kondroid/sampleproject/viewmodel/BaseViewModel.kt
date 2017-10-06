@@ -3,6 +3,7 @@ package com.kondroid.sampleproject.viewmodel
 import android.content.Context
 import android.databinding.ObservableField
 import android.view.View
+import io.reactivex.disposables.CompositeDisposable
 import java.lang.ref.WeakReference
 
 /**
@@ -10,9 +11,10 @@ import java.lang.ref.WeakReference
  */
 
 open class BaseViewModel(context: Context) {
-    val context: WeakReference<Context> = WeakReference(context)
-    val progressBarVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
-    var requesting: Boolean
+    protected val context: WeakReference<Context> = WeakReference(context)
+    protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    protected val progressBarVisibility: ObservableField<Int> = ObservableField(View.INVISIBLE)
+    protected var requesting: Boolean
         get() {
             return progressBarVisibility.get() == View.VISIBLE
         }
@@ -23,4 +25,12 @@ open class BaseViewModel(context: Context) {
                 progressBarVisibility.set(View.INVISIBLE)
             }
         }
+
+    open fun initVM() {
+
+    }
+
+    open fun release() {
+        compositeDisposable.dispose()
+    }
 }

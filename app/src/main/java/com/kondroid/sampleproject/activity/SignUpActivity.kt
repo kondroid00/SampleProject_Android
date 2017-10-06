@@ -15,9 +15,16 @@ class SignUpActivity : BaseActivity() {
         vm = SignUpViewModel(this)
         binding.vm = vm
 
+        vm.initVM()
+
         setUpCallback()
 
         setTitle(R.string.title_signup)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        vm.release()
     }
 
     private fun setUpCallback() {

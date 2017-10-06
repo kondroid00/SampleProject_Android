@@ -23,11 +23,18 @@ class HomeActivity : BaseActivity() {
         vm = HomeViewModel(this)
         binding.vm = vm
 
+        vm.initVM()
+
         setTitle(R.string.title_home)
 
         setUpRecyclerView()
 
         fetchRooms()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        vm.release()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

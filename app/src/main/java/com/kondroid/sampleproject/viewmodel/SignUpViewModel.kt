@@ -24,15 +24,19 @@ class SignUpViewModel(context: Context) : BaseViewModel(context) {
 
     val userModel = UsersModel()
 
-    init {
+    override fun initVM() {
+        super.initVM()
+
         //Validation
         val nameValid = RxUtils.toObservable(nameText)
-                .map { return@map Validation.textLength(context, it, 1, 12) }
+                .map { return@map Validation.textLength(context.get(), it, 1, 12) }
                 .share()
-        nameValid.subscribe { nameValidationText.set(it) }
+        val d1 = nameValid.subscribe { nameValidationText.set(it) }
 
         val registerButtonValid = nameValid.map { return@map it == "" }.share()
-        registerButtonValid.subscribe { registerButtonEnabled.set(it) }
+        val d2 = registerButtonValid.subscribe { registerButtonEnabled.set(it) }
+
+        compositeDisposable.addAll(d1, d2)
     }
 
     fun tapRegister() {
@@ -46,25 +50,20 @@ class SignUpViewModel(context: Context) : BaseViewModel(context) {
 
         val params = UserRequest.CreateParams(nameText.get())
         val observable = userModel.createUser(params)
-        observable.subscribeOn(Schedulers.io())
+        val d = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<UserRequest.CreateResult>() {
-                    override fun onComplete() {
-                        requesting = false
-                    }
-
-                    override fun onNext(t: UserRequest.CreateResult) {
-                        requesting = false
-                        AccountManager.token = t.token
-                        AccountManager.user = t.user
-                        onSuccess()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        requesting = false
-                        onFailed(e)
-                    }
+                .subscribe({t ->
+                    requesting = false
+                    AccountManager.token = t.token
+                    AccountManager.user = t.user
+                    onSuccess()
+                },{e ->
+                    requesting = false
+                    onFailed(e)
+                },{
+                    requesting = false
                 })
+        compositeDisposable.add(d)
     }
 
 

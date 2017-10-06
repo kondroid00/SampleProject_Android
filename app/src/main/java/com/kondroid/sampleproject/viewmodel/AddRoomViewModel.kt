@@ -28,22 +28,26 @@ class AddRoomViewModel(context: Context) : BaseViewModel(context) {
 
     lateinit var onTapCreate: () -> Unit
 
-    init {
+    override fun initVM() {
+        super.initVM()
+
         //Validation
         val nameValid = RxUtils.toObservable(nameText)
-                .map { return@map Validation.textLength(context, it, 1, 20) }
+                .map { return@map Validation.textLength(context.get(), it, 1, 20) }
                 .share()
-        nameValid.subscribe { nameValidationText.set(it) }
+        val d1 = nameValid.subscribe { nameValidationText.set(it) }
 
         val themeValid = RxUtils.toObservable(themeText)
-                .map { return@map Validation.textLength(context, it, 1, 20) }
+                .map { return@map Validation.textLength(context.get(), it, 1, 20) }
                 .share()
-        themeValid.subscribe { themeValidationText.set(it) }
+        val d2 = themeValid.subscribe { themeValidationText.set(it) }
 
         val createButtonValid = Observables.combineLatest(nameValid, themeValid, {name, theme ->
             return@combineLatest name == "" && theme == ""
         }).share()
-        createButtonValid.subscribe { createButtonEnabled.set(it) }
+        val d3 = createButtonValid.subscribe { createButtonEnabled.set(it) }
+
+        compositeDisposable.addAll(d1, d2, d3)
     }
 
     fun createRoom(onSuccess: () -> Unit, onFailed: (e: Throwable) -> Unit) {
@@ -52,24 +56,18 @@ class AddRoomViewModel(context: Context) : BaseViewModel(context) {
 
         val params = RoomRequest.CreateParams(nameText.get(), themeText.get())
         val observable = roomModel.createRoom(params)
-        observable.subscribeOn(Schedulers.io())
+        val d = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<RoomRequest.CreateResult>() {
-                    override fun onNext(t: RoomRequest.CreateResult) {
-                        requesting = false
-                        onSuccess()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        requesting = false
-                        onFailed(e)
-                    }
-
-                    override fun onComplete() {
-                        requesting = false
-                    }
+                .subscribe({t ->
+                    requesting = false
+                    onSuccess()
+                },{e ->
+                    requesting = false
+                    onFailed(e)
+                },{
+                    requesting = false
                 })
-
+        compositeDisposable.add(d)
     }
 
     fun tapCreate() {

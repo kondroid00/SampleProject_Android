@@ -6,6 +6,7 @@ import com.kondroid.sampleproject.dto.RoomDto
 import com.kondroid.sampleproject.model.RoomsModel
 import com.kondroid.sampleproject.request.RoomRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
@@ -18,33 +19,24 @@ class HomeViewModel(context: Context) : BaseViewModel(context) {
 
     val roomModel = RoomsModel()
 
-    lateinit var fetchRoomOnSuccess: () -> Unit
-    lateinit var fetchRoomOnFailed: (Throwable) -> Unit
-
     fun fetchRooms(onSuccess: () -> Unit, onFailed: (e: Throwable) -> Unit) {
         if (requesting) return
         requesting = true
 
         val params = RoomRequest.FetchParams()
         val observable = roomModel.fetchRooms(params)
-        observable.subscribeOn(Schedulers.io())
+        val d = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<RoomRequest.FetchResult>() {
-                    override fun onComplete() {
-                        requesting = false
-                    }
-
-                    override fun onNext(t: RoomRequest.FetchResult) {
-                        requesting = false
-                        rooms = t.rooms?.let {it} ?: listOf()
-                        onSuccess()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        requesting = false
-                        onFailed(e)
-                    }
-
+                .subscribe({t ->
+                    requesting = false
+                    rooms = t.rooms?.let {it} ?: listOf()
+                    onSuccess()
+                }, {e ->
+                    requesting = false
+                    onFailed(e)
+                }, {
+                    requesting = false
                 })
+        compositeDisposable.add(d)
     }
 }

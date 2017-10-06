@@ -18,6 +18,8 @@ class TopActivity : BaseActivity() {
         vm = TopViewModel(this)
         binding.vm = vm
 
+        vm.initVM()
+
         setUpCallback()
 
         supportActionBar?.hide()
@@ -26,7 +28,11 @@ class TopActivity : BaseActivity() {
             vm.startButtonVisibility.set(View.VISIBLE)
             login()
         }
+    }
 
+    override fun onStop() {
+        super.onStop()
+        vm.release()
     }
 
     private fun setUpCallback() {

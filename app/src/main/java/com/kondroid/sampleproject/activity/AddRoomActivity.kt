@@ -16,10 +16,16 @@ class AddRoomActivity : BaseActivity() {
         vm = AddRoomViewModel(this)
         binding.vm = vm
 
+        vm.initVM()
+
         setUpCallback()
 
         setTitle(R.string.title_addroom)
+    }
 
+    override fun onStop() {
+        super.onStop()
+        vm.release()
     }
 
     private fun setUpCallback() {

@@ -21,7 +21,6 @@ class TopViewModel(context: Context) : BaseViewModel(context) {
     val authModel = AuthModel()
 
     lateinit var onTapStart: () -> Unit
-    
 
     fun login(onSuccess: () -> Unit, onFailed: (e: Throwable) -> Unit) {
         if (requesting) return
@@ -29,26 +28,19 @@ class TopViewModel(context: Context) : BaseViewModel(context) {
 
         val params = AuthRequest.LoginParams(AccountManager.getUserId())
         val observable = authModel.login(params)
-        observable.subscribeOn(Schedulers.io())
+        val d = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<AuthRequest.LoginResult>() {
-                    override fun onComplete() {
-                        requesting = false
-                    }
-
-                    override fun onNext(t: AuthRequest.LoginResult) {
-                        requesting = false
-                        AccountManager.token = t.token
-                        onSuccess()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        requesting = false
-                        onFailed(e)
-                    }
-
+                .subscribe({t ->
+                    requesting = false
+                    AccountManager.token = t.token
+                    onSuccess()
+                }, {e ->
+                    requesting = false
+                    onFailed(e)
+                }, {
+                    requesting = false
                 })
-
+        compositeDisposable.add(d)
     }
 
     fun tapStart() {
