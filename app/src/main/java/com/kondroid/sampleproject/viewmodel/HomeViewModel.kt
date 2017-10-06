@@ -3,6 +3,7 @@ package com.kondroid.sampleproject.viewmodel
 import android.content.Context
 import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.dto.RoomDto
+import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.model.RoomsModel
 import com.kondroid.sampleproject.request.RoomRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,30 +19,28 @@ class HomeViewModel(context: Context) : BaseViewModel(context) {
 
     val roomModel = RoomsModel()
 
-    lateinit var fetchRoomOnSuccess: () -> Unit
-    lateinit var fetchRoomOnFailed: (Throwable) -> Unit
-
     fun fetchRooms(onSuccess: () -> Unit, onFailed: (e: Throwable) -> Unit) {
         if (requesting) return
         requesting = true
 
+        val weakSelf = makeWeak(this)
         val params = RoomRequest.FetchParams()
         val observable = roomModel.fetchRooms(params)
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<RoomRequest.FetchResult>() {
                     override fun onComplete() {
-                        requesting = false
+                        weakSelf.get()?.requesting = false
                     }
 
                     override fun onNext(t: RoomRequest.FetchResult) {
-                        requesting = false
-                        rooms = t.rooms?.let {it} ?: listOf()
+                        weakSelf.get()?.requesting = false
+                        weakSelf.get()?.rooms = t.rooms?.let {it} ?: listOf()
                         onSuccess()
                     }
 
                     override fun onError(e: Throwable) {
-                        requesting = false
+                        weakSelf.get()?.requesting = false
                         onFailed(e)
                     }
 

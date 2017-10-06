@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.ObservableField
 import android.view.View
 import com.kondroid.sampleproject.auth.AccountManager
+import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.model.AuthModel
 import com.kondroid.sampleproject.request.AuthRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,23 +28,24 @@ class TopViewModel(context: Context) : BaseViewModel(context) {
         if (requesting) return
         requesting = true
 
+        val weakSelf = makeWeak(this)
         val params = AuthRequest.LoginParams(AccountManager.getUserId())
         val observable = authModel.login(params)
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<AuthRequest.LoginResult>() {
                     override fun onComplete() {
-                        requesting = false
+                        weakSelf.get()?.requesting = false
                     }
 
                     override fun onNext(t: AuthRequest.LoginResult) {
-                        requesting = false
+                        weakSelf.get()?.requesting = false
                         AccountManager.token = t.token
                         onSuccess()
                     }
 
                     override fun onError(e: Throwable) {
-                        requesting = false
+                        weakSelf.get()?.requesting = false
                         onFailed(e)
                     }
 

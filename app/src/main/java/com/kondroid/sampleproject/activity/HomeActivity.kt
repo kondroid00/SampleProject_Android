@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.databinding.ActivityHomeBinding
+import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.view.adapter.RoomListAdapter
 import com.kondroid.sampleproject.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.activity_home.*
@@ -36,11 +37,13 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val weakSelf = makeWeak(this)
         item?.let {
             when (item.itemId) {
                 R.id.menu_room_add -> {
-                    goToAddRoom()
+                    weakSelf.get()?.goToAddRoom()
                 }
+                else -> {}
             }
         }
         return super.onOptionsItemSelected(item)
@@ -61,8 +64,9 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun fetchRooms() {
+        val weakSelf = makeWeak(this)
         vm.fetchRooms({
-                          roomListAdapter.setRooms(vm.rooms)
+                          weakSelf.get()?.roomListAdapter?.setRooms(vm.rooms)
                       },
                       {e ->
 
