@@ -13,7 +13,7 @@ class AddRoomActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var binding = DataBindingUtil.setContentView<ActivityAddRoomBinding>(this, R.layout.activity_add_room)
-        vm = AddRoomViewModel()
+        vm = AddRoomViewModel(this)
         binding.vm = vm
 
         setUpCallback()

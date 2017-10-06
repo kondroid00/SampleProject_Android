@@ -15,7 +15,7 @@ class TopActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var binding = DataBindingUtil.setContentView<ActivityTopBinding>(this, R.layout.activity_top)
-        vm = TopViewModel()
+        vm = TopViewModel(this)
         binding.vm = vm
 
         setUpCallback()

@@ -12,7 +12,7 @@ class SignUpActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var binding = DataBindingUtil.setContentView<ActivitySignupBinding>(this, R.layout.activity_signup)
-        vm = SignUpViewModel()
+        vm = SignUpViewModel(this)
         binding.vm = vm
 
         setUpCallback()

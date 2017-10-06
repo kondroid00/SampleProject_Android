@@ -1,5 +1,6 @@
 package com.kondroid.sampleproject.viewmodel
 
+import android.content.Context
 import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.dto.RoomDto
 import com.kondroid.sampleproject.model.RoomsModel
@@ -12,8 +13,7 @@ import io.reactivex.schedulers.Schedulers
  * Created by kondo on 2017/10/04.
  */
 
-class HomeViewModel : BaseViewModel() {
-
+class HomeViewModel(context: Context) : BaseViewModel(context) {
     var rooms: List<RoomDto> = listOf()
 
     val roomModel = RoomsModel()

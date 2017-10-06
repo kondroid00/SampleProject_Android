@@ -1,5 +1,6 @@
 package com.kondroid.sampleproject.viewmodel
 
+import android.content.Context
 import android.databinding.ObservableField
 import android.view.View
 import com.kondroid.sampleproject.auth.AccountManager
@@ -14,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
  * Created by kondo on 2017/09/28.
  */
 
-class TopViewModel : BaseViewModel() {
+class TopViewModel(context: Context) : BaseViewModel(context) {
     val startButtonVisibility: ObservableField<Int> = ObservableField(View.VISIBLE)
 
     val authModel = AuthModel()

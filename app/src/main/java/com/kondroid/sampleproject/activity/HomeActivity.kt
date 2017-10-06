@@ -20,7 +20,7 @@ class HomeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var binding = DataBindingUtil.setContentView<ActivityHomeBinding>(this, R.layout.activity_home)
-        vm = HomeViewModel()
+        vm = HomeViewModel(this)
         binding.vm = vm
 
         setTitle(R.string.title_home)
