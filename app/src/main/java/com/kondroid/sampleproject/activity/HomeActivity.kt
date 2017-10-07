@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import com.kondroid.sampleproject.R
@@ -54,6 +55,12 @@ class HomeActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
+        // バックボタン無効化
+        event?.let { if (event.keyCode == KeyEvent.KEYCODE_BACK) return true }
+        return super.dispatchKeyEvent(event)
     }
 
     private fun setUpRecyclerView() {
