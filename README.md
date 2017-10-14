@@ -1,2 +1,2 @@
 # SampleProject_Android
-RxJava + MVVM + DataBinding Sample Code
+RxKotlin + MVVM + DataBinding Sample Code
