@@ -30,7 +30,10 @@ class HomeActivity : BaseActivity() {
         setTitle(R.string.title_home)
 
         setUpRecyclerView()
+    }
 
+    override fun onResume() {
+        super.onResume()
         fetchRooms()
     }
 

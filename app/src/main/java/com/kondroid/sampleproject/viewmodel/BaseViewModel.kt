@@ -31,6 +31,6 @@ open class BaseViewModel(context: Context) {
     }
 
     open fun release() {
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 }
