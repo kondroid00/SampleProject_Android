@@ -22,7 +22,8 @@
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.SignUpActivity" />
         <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.AddRoomActivity"></activity>
+        <activity android:name=".activity.AddRoomActivity" />
+        <activity android:name=".activity.ChatActivity"></activity>
     </application>
 
 </manifest>

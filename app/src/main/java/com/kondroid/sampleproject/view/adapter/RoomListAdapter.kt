@@ -16,6 +16,7 @@ import com.kondroid.sampleproject.viewmodel.cell.RoomListViewModel
 
 class RoomListAdapter() : RecyclerView.Adapter<RoomListAdapter.ListViewHolder>() {
     private var rooms: List<RoomDto> = mutableListOf()
+    lateinit var selectCallback: (String) -> Unit
 
     fun setRooms(rooms: List<RoomDto>) {
         this.rooms = rooms
@@ -29,6 +30,7 @@ class RoomListAdapter() : RecyclerView.Adapter<RoomListAdapter.ListViewHolder>()
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ListViewHolder {
         val binding = DataBindingUtil.inflate<CellRoomListviewBinding>(LayoutInflater.from(parent!!.context), R.layout.cell_room_listview, parent, false)
         val viewModel = RoomListViewModel()
+        viewModel.selectCallback = selectCallback
         binding.vm = viewModel
         return ListViewHolder(binding.root, viewModel)
     }

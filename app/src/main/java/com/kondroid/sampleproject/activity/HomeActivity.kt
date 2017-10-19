@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -77,6 +78,10 @@ class HomeActivity : BaseActivity() {
         recyclerView.addItemDecoration(dividerItemDecoration)
 
         roomListAdapter = RoomListAdapter()
+        val weakSelf = makeWeak(this)
+        roomListAdapter.selectCallback = {roomId ->
+            weakSelf.get()?.goToChat(roomId)
+        }
         recyclerView.adapter = roomListAdapter
     }
 
@@ -94,4 +99,7 @@ class HomeActivity : BaseActivity() {
         startActivity<AddRoomActivity>()
     }
 
+    private fun goToChat(roomId: String) {
+        startActivity<ChatActivity>("roomId" to roomId)
+    }
 }
