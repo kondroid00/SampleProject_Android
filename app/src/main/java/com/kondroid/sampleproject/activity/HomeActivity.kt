@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.databinding.ActivityHomeBinding
+import com.kondroid.sampleproject.dto.RoomDto
 import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.view.adapter.RoomListAdapter
 import com.kondroid.sampleproject.viewmodel.HomeViewModel
@@ -79,8 +80,8 @@ class HomeActivity : BaseActivity() {
 
         roomListAdapter = RoomListAdapter()
         val weakSelf = makeWeak(this)
-        roomListAdapter.selectCallback = {roomId ->
-            weakSelf.get()?.goToChat(roomId)
+        roomListAdapter.selectCallback = {room ->
+            weakSelf.get()?.goToChat(room)
         }
         recyclerView.adapter = roomListAdapter
     }
@@ -99,7 +100,9 @@ class HomeActivity : BaseActivity() {
         startActivity<AddRoomActivity>()
     }
 
-    private fun goToChat(roomId: String) {
-        startActivity<ChatActivity>("roomId" to roomId)
+    private fun goToChat(room: RoomDto) {
+        if (room.id != null && room.name != null) {
+            startActivity<ChatActivity>("roomId" to room.id, "roomName" to room.name)
+        }
     }
 }

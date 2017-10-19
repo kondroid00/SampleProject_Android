@@ -43,6 +43,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/rounded_corner_green"
+                android:onClick="@{(view)->vm.tapSend()}"
                 android:text="送信"
                 android:textColor="@color/White"
                 android:textSize="14sp"
@@ -60,7 +61,7 @@
                 android:ems="10"
                 android:inputType="text|textPersonName"
                 android:singleLine="false"
-                android:text="Name"
+                android:text="@={vm.inputText}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/chatSendButton"
                 app:layout_constraintStart_toStartOf="parent" />

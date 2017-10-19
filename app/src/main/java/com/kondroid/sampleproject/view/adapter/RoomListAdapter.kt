@@ -16,15 +16,11 @@ import com.kondroid.sampleproject.viewmodel.cell.RoomListViewModel
 
 class RoomListAdapter() : RecyclerView.Adapter<RoomListAdapter.ListViewHolder>() {
     private var rooms: List<RoomDto> = mutableListOf()
-    lateinit var selectCallback: (String) -> Unit
+    lateinit var selectCallback: (RoomDto) -> Unit
 
     fun setRooms(rooms: List<RoomDto>) {
         this.rooms = rooms
         notifyDataSetChanged()
-    }
-
-    override fun onBindViewHolder(holder: ListViewHolder?, position: Int) {
-        holder?.loadItem(rooms[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ListViewHolder {
@@ -33,6 +29,10 @@ class RoomListAdapter() : RecyclerView.Adapter<RoomListAdapter.ListViewHolder>()
         viewModel.selectCallback = selectCallback
         binding.vm = viewModel
         return ListViewHolder(binding.root, viewModel)
+    }
+
+    override fun onBindViewHolder(holder: ListViewHolder?, position: Int) {
+        holder?.loadItem(rooms[position])
     }
 
     override fun getItemCount(): Int {
