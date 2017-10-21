@@ -35,6 +35,7 @@ class TopViewModel(context: Context) : BaseViewModel(context) {
                 .subscribe({t ->
                     weakSelf.get()?.requesting = false
                     AccountManager.token = t.token
+                    AccountManager.user = t.user
                     onSuccess()
                 }, {e ->
                     weakSelf.get()?.requesting = false

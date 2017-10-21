@@ -30,10 +30,13 @@ object AccountManager {
 
     var user: UserDto? = null
         set(value) {
-            val pref = PreferenceManager.getDefaultSharedPreferences(context)
-            var editor = pref!!.edit()
-            editor.putString(UDUserIdKey, value?.id)
-            editor.commit()
+            value?.let {
+                val pref = PreferenceManager.getDefaultSharedPreferences(context)
+                var editor = pref!!.edit()
+                editor.putString(UDUserIdKey, it.id)
+                editor.commit()
+                field = it
+            }
         }
 
     fun hasUserId(): Boolean {

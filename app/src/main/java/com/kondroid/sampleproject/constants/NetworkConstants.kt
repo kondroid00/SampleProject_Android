@@ -15,4 +15,9 @@ object NetworkConstants {
         get(): String {
             return context.getString(R.string.const_api_server_scheme) + context.getString(R.string.const_api_server_host)
         }
+
+    val socketUrl: String
+        get(): String {
+            return context.getString(R.string.const_socket_server_scheme) + context.getString(R.string.const_socket_server_host)
+        }
 }

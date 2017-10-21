@@ -8,5 +8,5 @@ data class WebSocketActionDto(val clients: List<WebSocketActionDto.Client>) {
     data class Client(val clientNo: Int,
                       val name: String?,
                       val action: Boolean,
-                      val selfFlag: Boolean)
+                      val self: Boolean)
 }

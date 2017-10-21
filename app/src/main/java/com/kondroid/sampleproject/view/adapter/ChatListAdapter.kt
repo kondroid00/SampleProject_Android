@@ -17,12 +17,15 @@ import java.lang.ref.WeakReference
  * Created by kondo on 2017/10/19.
  */
 
-class ChatListAdapter(val clientNo: Int, context: Context) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
+class ChatListAdapter(context: Context) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
     private val OUTGOING = 1
     private val INCOMING = 2
 
     private val context: WeakReference<Context> = WeakReference(context)
     private var messages: List<WebSocketMessageDto> = mutableListOf()
+
+    var clientNo: Int? = null
+        set(value) { if (field == null) field = value }
 
     fun setMessages(messages: List<WebSocketMessageDto>) {
         this.messages = messages
