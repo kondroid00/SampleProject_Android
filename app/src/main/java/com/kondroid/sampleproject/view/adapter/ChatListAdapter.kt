@@ -29,11 +29,11 @@ class ChatListAdapter(context: Context) : RecyclerView.Adapter<ChatListAdapter.L
 
     fun setMessages(messages: List<WebSocketMessageDto>) {
         this.messages = messages
-        notifyDataSetChanged()
+        notifyItemInserted(itemCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ListViewHolder {
-        if (context != null) {
+        if (context.get() != null) {
             val vm = ChatListViewModel()
             when (viewType) {
                 OUTGOING -> {

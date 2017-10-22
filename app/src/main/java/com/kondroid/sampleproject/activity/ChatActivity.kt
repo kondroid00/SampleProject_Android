@@ -65,7 +65,6 @@ class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
         recyclerView.layoutManager = layoutManager
 
         chatListAdapter = ChatListAdapter(this)
-        val weakSelf = makeWeak(this)
         recyclerView.adapter = chatListAdapter
     }
 

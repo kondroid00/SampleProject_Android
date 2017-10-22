@@ -94,8 +94,10 @@ class WebSocketLogic {
     }
 
     private fun write(prefix: ChatConstants.MsgPrefix, json: String) {
-        val jsonData = prefix.value + json
-        socket?.send(jsonData)
+        if (state == State.Opened) {
+            val jsonData = prefix.value + json
+            socket?.send(jsonData)
+        }
     }
 
     //-------------------------------------------------------------------------------------------
