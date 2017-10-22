@@ -14,8 +14,10 @@ import com.kondroid.sampleproject.helper.makeWeak
 import com.kondroid.sampleproject.helper.toJson
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import kotlinx.coroutines.experimental.sync.Mutex
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
+import org.jetbrains.anko.runOnUiThread
 import java.lang.Exception
 import java.lang.ref.WeakReference
 import java.net.URI
@@ -25,7 +27,7 @@ import java.net.URI
  * Created by kondo on 2017/10/20.
  */
 
-class WebSocketLogic {
+class WebSocketLogic(context: Context) {
 
     enum class State {
         Opening,
@@ -36,6 +38,9 @@ class WebSocketLogic {
     // State
     var state = State.Closed
         private set
+
+    // Context
+    private val context: WeakReference<Context> = WeakReference(context)
 
     // WebSocket
     private var socket: WebSocketClient? = null
@@ -48,7 +53,7 @@ class WebSocketLogic {
 
     fun connect(roomId: String) {
 
-        val url = URI(NetworkConstants.socketUrl + "/" + roomId);
+        val url = URI(NetworkConstants.socketUrl + "/" + roomId)
 
         val weakSelf = makeWeak(this)
         socket = object : WebSocketClient(url) {
@@ -131,32 +136,43 @@ class WebSocketLogic {
                 }
             }
         }
-        delegate.get()?.onReceiveJoined(data)
+        context.get()?.runOnUiThread {
+            delegate.get()?.onReceiveJoined(data)
+        }
     }
 
     private fun receiveRemoved(data: WebSocketActionDto) {
-        delegate.get()?.onReceiveRemoved(data)
+        context.get()?.runOnUiThread {
+            delegate.get()?.onReceiveRemoved(data)
+        }
     }
 
     private fun receiveMessage(data: WebSocketMessageDto) {
-        delegate.get()?.onReceiveMessage(data)
+        context.get()?.runOnUiThread {
+            delegate.get()?.onReceiveMessage(data)
+        }
     }
 
     private fun receiveError(data: WebSocketErrorDto) {
-        delegate.get()?.onReceiveError(data)
+        context.get()?.runOnUiThread {
+            delegate.get()?.onReceiveError(data)
+        }
     }
 
     //-------------------------------------------------------------------------------------------
     //  WebSocketClient Callback
     //-------------------------------------------------------------------------------------------
     private fun onOpen(handshakedata: ServerHandshake?) {
-        state = State.Opened
-        delegate.get()?.onOpen()
+        context.get()?.runOnUiThread {
+            state = State.Opened
+            delegate.get()?.onOpen()
+        }
     }
 
     private fun onClose(code: Int, reason: String?, remote: Boolean) {
-
-        state = State.Closed
+        context.get()?.runOnUiThread {
+            state = State.Closed
+        }
     }
 
     private fun onMessage(message: String?) {
@@ -170,19 +186,27 @@ class WebSocketLogic {
                 when (prefix) {
                     ChatConstants.MsgPrefix.JOINED -> {
                         val data = fromJson<WebSocketActionDto>(json)
-                        if (data != null) receiveJoined(data)
+                        context.get()?.runOnUiThread {
+                            if (data != null) receiveJoined(data)
+                        }
                     }
                     ChatConstants.MsgPrefix.REMOVED -> {
                         val data = fromJson<WebSocketActionDto>(json)
-                        if (data != null) receiveRemoved(data)
+                        context.get()?.runOnUiThread {
+                            if (data != null) receiveRemoved(data)
+                        }
                     }
                     ChatConstants.MsgPrefix.MESSAGE -> {
                         val data = fromJson<WebSocketMessageDto>(json)
-                        if (data != null) receiveMessage(data)
+                        context.get()?.runOnUiThread {
+                            if (data != null) receiveMessage(data)
+                        }
                     }
                     ChatConstants.MsgPrefix.ERROR -> {
                         val data = fromJson<WebSocketErrorDto>(json)
-                        if (data != null) receiveError(data)
+                        context.get()?.runOnUiThread {
+                            if (data != null) receiveError(data)
+                        }
                     }
                 }
             } catch (e: Exception) {

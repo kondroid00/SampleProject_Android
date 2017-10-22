@@ -1,9 +1,13 @@
 package com.kondroid.sampleproject.activity
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.auth.AccountManager
 import com.kondroid.sampleproject.databinding.ActivityChatBinding
@@ -17,9 +21,10 @@ import com.kondroid.sampleproject.viewmodel.ChatViewModel
 import kotlinx.android.synthetic.main.activity_chat.*
 
 class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
+    private lateinit var recyclerView: RecyclerView
     private lateinit var chatListAdapter: ChatListAdapter
     private lateinit var vm: ChatViewModel
-    private val webSocketLogic = WebSocketLogic()
+    private val webSocketLogic = WebSocketLogic(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +63,7 @@ class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
     }
 
     private fun setUpRecyclerView() {
-        val recyclerView = chatRecyclerView
+        recyclerView = chatRecyclerView
         recyclerView.setHasFixedSize(true)
 
         val layoutManager = LinearLayoutManager(this)
@@ -75,13 +80,15 @@ class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
 
     private fun sendMessage() {
         webSocketLogic.sendMessage(vm.inputText.get())
+        vm.clearInput()
+        val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
     //-------------------------------------------------------------------------------------------
     //  WebSocketLogic Delegate
     //-------------------------------------------------------------------------------------------
     override fun onOpen() {
-        val a = AccountManager.user
         AccountManager.user?.let {
             webSocketLogic.sendJoin(it)
         }
@@ -102,6 +109,7 @@ class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
     override fun onReceiveMessage(data: WebSocketMessageDto) {
         vm.addMessage(data)
         chatListAdapter.setMessages(vm.messages)
+        recyclerView.scrollToPosition(chatListAdapter.itemCount - 1)
     }
 
     override fun onReceiveError(data: WebSocketErrorDto) {

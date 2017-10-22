@@ -59,7 +59,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:ems="10"
-                android:inputType="text|textPersonName"
+                android:inputType="text|textMultiLine|textPersonName"
                 android:singleLine="false"
                 android:text="@={vm.inputText}"
                 app:layout_constraintBottom_toBottomOf="parent"

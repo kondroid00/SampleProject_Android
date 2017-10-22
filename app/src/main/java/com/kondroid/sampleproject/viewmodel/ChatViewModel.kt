@@ -29,4 +29,8 @@ class ChatViewModel(context: Context) : BaseViewModel(context) {
     fun addMessage(message: WebSocketMessageDto) {
         messages.add(message)
     }
+
+    fun clearInput() {
+        inputText.set("")
+    }
 }
