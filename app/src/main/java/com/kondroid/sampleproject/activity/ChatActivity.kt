@@ -41,8 +41,7 @@ class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
         setTitle(roomName)
 
         webSocketLogic.delegate = makeWeak(this)
-        //webSocketLogic.connect(roomId)
-        webSocketLogic.connect("test")
+        webSocketLogic.connect(roomId)
 
         val weakSelf = makeWeak(this)
         vm.onTapSend = {
