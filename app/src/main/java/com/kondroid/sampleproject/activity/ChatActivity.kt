@@ -19,6 +19,7 @@ import com.kondroid.sampleproject.logic.WebSocketLogic
 import com.kondroid.sampleproject.view.adapter.ChatListAdapter
 import com.kondroid.sampleproject.viewmodel.ChatViewModel
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.java_websocket.framing.CloseFrame
 
 class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
     private lateinit var recyclerView: RecyclerView
@@ -95,7 +96,17 @@ class ChatActivity : BaseActivity(), WebSocketLogic.Delegate {
     }
 
     override fun onClose(code: Int, reason: String?, remote: Boolean) {
-
+        when (code) {
+            CloseFrame.NEVER_CONNECTED -> {
+                val weakSelf = makeWeak(this)
+                showAlert(getString(R.string.alert_socket_error_connect_failed), handler1 = {
+                    weakSelf.get()?.finish()
+                })
+            }
+            CloseFrame.ABNORMAL_CLOSE, CloseFrame.GOING_AWAY -> {
+                showAlert(getString(R.string.alert_socket_error_connecting_failed))
+            }
+        }
     }
 
     override fun onReceiveJoined(data: WebSocketActionDto) {

@@ -1,6 +1,7 @@
 package com.kondroid.sampleproject.logic
 
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import com.kondroid.sampleproject.R
 import com.kondroid.sampleproject.constants.ChatConstants
@@ -15,7 +16,11 @@ import com.kondroid.sampleproject.helper.toJson
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.experimental.sync.Mutex
+import org.java_websocket.WebSocket
 import org.java_websocket.client.WebSocketClient
+import org.java_websocket.drafts.Draft_6455
+import org.java_websocket.framing.CloseFrame
+import org.java_websocket.framing.Framedata
 import org.java_websocket.handshake.ServerHandshake
 import org.jetbrains.anko.runOnUiThread
 import java.lang.Exception
@@ -51,12 +56,24 @@ class WebSocketLogic(context: Context) {
         private set
     private var name: String? = null
 
+    // PingPong
+    private val PingPongInterval: Long = 5000 // ５秒間Pongが帰ってこなかったら切断
+    private val CheckPingPongInterval: Long = 1000 // １秒間ごとにPingPongのチェックをする
+    private var pongReceiveTime: Long? = null // 最後にPongを受け取った時間
+    private val pingPongHandler = Handler()
+    private lateinit var pingPongRunnable: Runnable
+
     fun connect(roomId: String) {
 
         val url = URI(NetworkConstants.socketUrl + "/" + roomId)
 
         val weakSelf = makeWeak(this)
-        socket = object : WebSocketClient(url) {
+        socket = object : WebSocketClient(url, Draft_6455(), null, 5000) {
+            init {
+                // クラッシュするのでPingPongの処理を止めて自前で管理する
+                stopConnectionLostTimer()
+            }
+
             override fun onOpen(handshakedata: ServerHandshake?) {
                 weakSelf.get()?.onOpen(handshakedata)
             }
@@ -72,16 +89,31 @@ class WebSocketLogic(context: Context) {
             override fun onError(ex: Exception?) {
                 weakSelf.get()?.onError(ex)
             }
+
+            override fun onWebsocketPong(conn: WebSocket?, f: Framedata?) {
+                super.onWebsocketPong(conn, f)
+                weakSelf.get()?.onPong()
+            }
         }
-        if (socket != null) {
-            socket?.connect()
+
+        socket?.let {
+            it.connect()
             state = State.Opening
+
+            // PingPong
+            pingPongRunnable = Runnable {
+                weakSelf.get()?.checkPingPong()
+                pingPongHandler.removeCallbacks(pingPongRunnable)
+                if (weakSelf.get()?.state != State.Closed) pingPongHandler.postDelayed(pingPongRunnable, CheckPingPongInterval)
+            }
+            pingPongHandler.postDelayed(pingPongRunnable, CheckPingPongInterval)
         }
     }
 
     fun disconnect() {
         state = State.Closed
         socket?.close()
+        pingPongHandler.removeCallbacks(pingPongRunnable)
     }
 
     fun isSelf(data: WebSocketMessageDto): ChatConstants.ChatMessageOwner {
@@ -160,6 +192,24 @@ class WebSocketLogic(context: Context) {
     }
 
     //-------------------------------------------------------------------------------------------
+    //  PingPong
+    //-------------------------------------------------------------------------------------------
+    private fun checkPingPong() {
+        // Ping送信
+        if (state == State.Opened) socket?.sendPing()
+
+        // Pongが帰ってきてるかチェック
+        pongReceiveTime?.let {
+            val diff = System.currentTimeMillis() - it
+            if (diff > PingPongInterval) {
+                disconnect()
+                delegate.get()?.onClose(CloseFrame.GOING_AWAY, null, true)
+            }
+        }
+
+    }
+
+    //-------------------------------------------------------------------------------------------
     //  WebSocketClient Callback
     //-------------------------------------------------------------------------------------------
     private fun onOpen(handshakedata: ServerHandshake?) {
@@ -171,6 +221,7 @@ class WebSocketLogic(context: Context) {
 
     private fun onClose(code: Int, reason: String?, remote: Boolean) {
         context.get()?.runOnUiThread {
+            delegate.get()?.onClose(code, reason, remote)
             state = State.Closed
         }
     }
@@ -216,6 +267,13 @@ class WebSocketLogic(context: Context) {
     }
 
     private fun onError(ex: Exception?) {
+        Log.d("Socket Error", ex?.let { it.message?.let {it} ?: ""} ?: "")
+    }
+
+    private fun onPong() {
+        context.get()?.runOnUiThread {
+            pongReceiveTime = System.currentTimeMillis()
+        }
     }
 
     interface Delegate {

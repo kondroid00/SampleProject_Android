@@ -18,6 +18,8 @@
     <string name="alert_room_create_error_message">ルームの作成に失敗しました。</string>
     <string name="alert_room_create_error_title">失敗</string>
     <string name="alert_login_error_btn_retry">リトライ</string>
+    <string name="alert_socket_error_connecting_failed">接続が切れました。</string>
+    <string name="alert_socket_error_connect_failed">接続に失敗しました。</string>
     <string name="title_signup">新規登録</string>
     <string name="title_home">ホーム</string>
     <string name="title_addroom">新規作成</string>
