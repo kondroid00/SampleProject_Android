@@ -116,13 +116,6 @@ class WebSocketLogic(context: Context) {
         pingPongHandler.removeCallbacks(pingPongRunnable)
     }
 
-    fun isSelf(data: WebSocketMessageDto): ChatConstants.ChatMessageOwner {
-        if (data.clientNo != null && clientNo != null) {
-            return if (clientNo == data.clientNo) ChatConstants.ChatMessageOwner.MYSELF else ChatConstants.ChatMessageOwner.OTHER
-        }
-        return ChatConstants.ChatMessageOwner.UNKNOWN
-    }
-
     private fun write(prefix: ChatConstants.MsgPrefix, params: Map<String, Any>) {
         val moshi = Moshi.Builder().build()
         val type = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
