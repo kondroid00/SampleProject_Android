@@ -2,9 +2,9 @@
     <string name="app_name">SampleProject</string>
     <string name="title_name">SampleProject</string>
     <string name="const_api_server_scheme">http://</string>
-    <string name="const_api_server_host">192.168.100.6:8080</string>
+    <string name="const_api_server_host">10.0.2.2:8080</string>
     <string name="const_socket_server_scheme">ws://</string>
-    <string name="const_socket_server_host">192.168.100.6:1323</string>
+    <string name="const_socket_server_host">10.0.2.2:1323</string>
     <string name="alert_default_message">通信に失敗しました。</string>
     <string name="alert_default_title">エラー</string>
     <string name="alert_default_ok_btn_title">OK</string>
